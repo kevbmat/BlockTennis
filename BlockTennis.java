@@ -13,18 +13,19 @@ public class BlockTennis{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         TennisPanel tp = new TennisPanel();
+        JLabel backgroundImage = new JLabel(new ImageIcon("cyberpunk.jpg"));
 
-        //tp.setLayout(new BorderLayout());
+        tp.setLayout(new BorderLayout());
         frame.add(tp);
         frame.setSize(1800, 750);
         tp.addKeyListener(tp);
         ArrayList<Integer> activeKeys = new ArrayList<Integer>();
         tp.setFocusable(true);
         tp.requestFocusInWindow();
+        //frame.add(backgroundImage);
         frame.setVisible(true);
     }
 }
-
 class TennisPanel extends JPanel implements KeyListener, ActionListener{
 	/* WINDOW VARS */
 	private int width = 1800;    // X dimension for window
@@ -45,6 +46,10 @@ class TennisPanel extends JPanel implements KeyListener, ActionListener{
 	private int dx = 2;		// increment amount (x coord)
 	private int dy = 2;		// increment amount (y coord)
 	
+	/* BRICK VARS */
+	ArrayList<Integer> playerOneBricks = new ArrayList<Integer>();
+	ArrayList<Integer> playerTwoBricks = new ArrayList<Integer>();
+	
 	/* TIMER VARS */
 	protected Timer timer;
 	private int delay = 5;
@@ -54,9 +59,6 @@ class TennisPanel extends JPanel implements KeyListener, ActionListener{
 	public TennisPanel(){
 		timer = new Timer(delay, this);
 		timer.start();		// start the timer
-	}
-	public void getPaddleCollision(int paddleNum, String bound){
-		
 	}
 	public void actionPerformed(ActionEvent arg) {
 		// Search through arraylist for active keys and move paddles
@@ -81,8 +83,25 @@ class TennisPanel extends JPanel implements KeyListener, ActionListener{
 		}
 		repaint();
 	}
+	public int getBlockX(int blockWidth, int blockPosition, String loc){
+		if (loc.equals("left")) {
+			return blockPosition-(blockWidth/2);
+		}else if(loc.equals("right")) {
+			return blockPosition+(blockWidth/2);
+		}
+		return 0;
+	}
+	public int getBlockY(int blockHeight, int blockPosition, String loc) {
+		if (loc.equals("top")) {
+			return blockPosition-(blockHeight/2);
+		}else if(loc.equals("bottom")) {
+			return blockPosition+(blockHeight/2);
+		}
+		return 0;
+	}
 	public void paintComponent( Graphics g )
     {
+		
 		super.paintComponent( g );
 		//g.drawRect(paddleSizeX, paddleSizeY, (int) (width*.40), height/2);
 		g.drawRect((int) (width*.30), ((int) (height/2))-(paddleHeight/2)+paddleOnePos, paddleWidth, paddleHeight);
@@ -97,7 +116,33 @@ class TennisPanel extends JPanel implements KeyListener, ActionListener{
 			dy = Math.abs(dy);
 		if (y > getHeight() - radius)
 			dy = -Math.abs(dy);
-
+		
+		//Player 1 Paddle collision
+		if((x >= getBlockX(paddleWidth, (int) (width*.30)-paddleWidth, "left")) && (x <= getBlockX(paddleWidth, (int) (width*.30)+paddleWidth, "right")) && (y >= getBlockY(paddleHeight, ((height/2)+paddleOnePos), "top")) && (y <= getBlockY(paddleHeight, ((height/2)+paddleOnePos), "bottom"))) {
+			if (dx >= 0) {
+				dx = -Math.abs(dx);
+			}else {
+				dx = Math.abs(dx);
+			}
+			if (dy >= 0) {
+				dy = Math.abs(dx);
+			}else {
+				dy = -Math.abs(dx);
+			}
+		}
+		//Player 2 Paddle collision
+		if((x >= getBlockX(paddleWidth, (int) (width*.70)-paddleWidth, "left")) && (x <= getBlockX(paddleWidth, (int) (width*.70), "right")) && (y >= getBlockY(paddleHeight, ((height/2)+paddleTwoPos), "top")) && (y <= getBlockY(paddleHeight, ((height/2)+paddleTwoPos), "bottom"))) {
+			if (dx >= 0) {
+				dx = -Math.abs(dx);
+			}else {
+				dx = Math.abs(dx);
+			}
+			if (dy >= 0) {
+				dy = Math.abs(dx);
+			}else {
+				dy = -Math.abs(dx);
+			}
+		}
 		// adjust ball position
 		x += dx;
 		y += dy;
