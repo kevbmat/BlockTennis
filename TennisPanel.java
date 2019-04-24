@@ -11,7 +11,7 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 	/* PADDLE VARS */
 	private int paddleWidth = 20; // X dimension for paddles
 	private int paddleHeight = 110; // Y dimension for paddles
-	private int paddleSpeed = 3;
+	private int paddleSpeed = 4;
 	private int paddleOnePos = 0; // X dimension for paddles
 	private int paddleTwoPos = 0; // X dimension for paddles
 	
@@ -168,9 +168,11 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 		// check if either player has won
 		if (playerOneBricks.isEmpty()) {
 			System.out.println("Player 2 has won!");
+			// JOptionPane.showConfirmDialog(null, "Player 2 has won!");
 			System.exit(0);
 		} else if (playerTwoBricks.isEmpty()) {
 			System.out.println("Player 1 has won!");
+			// JOptionPane.showConfirmDialog(null, "Player 1 has won!");
 			System.exit(0);
 		}
 
