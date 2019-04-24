@@ -37,8 +37,10 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 		timer.start();		// start the timer
 
 		// adding blocks to the each players block arraylist
-		playerOneBricks.add(new Block(200, 350, 20, 300));
-		playerTwoBricks.add(new Block(width - 200, 350, 20, 300));
+		for (int i = 200; i <= 500; i += 150) {
+			playerOneBricks.add(new Block(200, i, 20, 100));
+			playerTwoBricks.add(new Block(width - 200, i, 20, 100));
+		}
 	}
 
 	public void actionPerformed(ActionEvent arg) {
