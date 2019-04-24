@@ -94,6 +94,20 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 		!b.isHit;
 	}
 
+	// changes the motion of the ball (due to a collision)
+	public void ballCollision() {
+		if (dx >= 0) {
+			dx = -Math.abs(dx);
+		} else {
+			dx = Math.abs(dx);
+		}
+		if (dy >= 0) {
+			dy = Math.abs(dx);
+		} else {
+			dy = -Math.abs(dx);
+		}
+	}
+
 	public void paintComponent( Graphics g ) {
 		super.paintComponent( g );
 
@@ -110,6 +124,7 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 		g.drawRect((int) (width*.70)-paddleWidth, ((int) (height/2))-(paddleHeight/2)+paddleTwoPos, paddleWidth, paddleHeight);
 		g.setColor(Color.GREEN);
 		
+		// checking for if the ball is hitting the game boundaries
 		if (x < radius)
 			dx = Math.abs(dx);
 		if (x > getWidth() - radius)	
@@ -119,52 +134,16 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 		if (y > getHeight() - radius)
 			dy = -Math.abs(dy);
 
-		// messing around with block collisions for my own learning
-		/*
-		if (x >= getBlockX(100, 850, "left") && x <= getBlockX(100, 850, "right") && 
-		y >= getBlockY(500, 350, "top") && y <= getBlockY(500, 350, "bottom")) {
-			if (dx >= 0) {
-				dx = -Math.abs(dx);
-			} else {
-				dx = Math.abs(dx);
-			}
-			if (dy >= 0) {
-				dy = Math.abs(dx);
-			} else {
-				dy = -Math.abs(dx);
-			}
-			g.clearRect(800, 100, 100, 500);
-		}
-		*/
-
 		//Player 1 Paddle collision
 		if ((x >= getBlockX(paddleWidth, (int) (width*.30)-paddleWidth, "left")) && (x <= getBlockX(paddleWidth, (int) (width*.30)+paddleWidth, "right")) && 
 		(y >= getBlockY(paddleHeight, ((height/2)+paddleOnePos), "top")) && (y <= getBlockY(paddleHeight, ((height/2)+paddleOnePos), "bottom"))) {
-			if (dx >= 0) {
-				dx = -Math.abs(dx);
-			} else {
-				dx = Math.abs(dx);
-			}
-			if (dy >= 0) {
-				dy = Math.abs(dx);
-			} else {
-				dy = -Math.abs(dx);
-			}
+			ballCollision();
 		}
 
 		//Player 2 Paddle collision
 		if ((x >= getBlockX(paddleWidth, (int) (width*.70)-paddleWidth, "left")) && (x <= getBlockX(paddleWidth, (int) (width*.70), "right")) && 
 		(y >= getBlockY(paddleHeight, ((height/2)+paddleTwoPos), "top")) && (y <= getBlockY(paddleHeight, ((height/2)+paddleTwoPos), "bottom"))) {
-			if (dx >= 0) {
-				dx = -Math.abs(dx);
-			} else {
-				dx = Math.abs(dx);
-			}
-			if (dy >= 0) {
-				dy = Math.abs(dx);
-			} else {
-				dy = -Math.abs(dx);
-			}
+			ballCollision();
 		}
 
 		// check block colision
@@ -172,6 +151,7 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 			if (hitBlock(playerOneBricks.get(i))) {
 				g.clearRect(playerOneBricks.get(i).topLeftX, playerOneBricks.get(i).topLeftY, playerOneBricks.get(i).width, playerOneBricks.get(i).height);
 				playerOneBricks.get(i).isHit = true;
+				ballCollision();
 			}
 		}
 
