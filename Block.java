@@ -5,7 +5,6 @@ public class Block {
     public int width;
     public int topLeftX;
     public int topLeftY;
-    public boolean isHit;
 
     public Block(int centerX, int centerY, int width, int height) {
         this.centerX = centerX;
@@ -14,6 +13,5 @@ public class Block {
         this.height = height;
         this.topLeftX = centerX - (width / 2);
         this.topLeftY = centerY - (height / 2);
-        this.isHit = false;
     }
 }

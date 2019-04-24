@@ -11,24 +11,21 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 	/* PADDLE VARS */
 	private int paddleWidth = 20; // X dimension for paddles
 	private int paddleHeight = 110; // Y dimension for paddles
-	private int paddleSpeed = 2;
+	private int paddleSpeed = 3;
 	private int paddleOnePos = 0; // X dimension for paddles
 	private int paddleTwoPos = 0; // X dimension for paddles
 	
 	/* BALL VARS */
-	private int x = 0;		// x position
-	private int y = 0;		// y position
+	private int x = width / 2;		// x position
+	private int y = height / 2;		// y position
 	private int radius = 10;	// ball radius
 
-	private int dx = 2;		// increment amount (x coord)
-	private int dy = 2;		// increment amount (y coord)
+	private int dx = 3;		// increment amount (x coord)
+	private int dy = 3;		// increment amount (y coord)
 	
 	/* BRICK VARS */
 	ArrayList<Block> playerOneBricks = new ArrayList<>();
 	ArrayList<Block> playerTwoBricks = new ArrayList<>();
-
-	/* BRICK SIZE */
-	private int brickSize = 40;
 	
 	/* TIMER VARS */
 	private Timer timer;
@@ -41,6 +38,7 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 
 		// adding blocks to the each players block arraylist
 		playerOneBricks.add(new Block(200, 350, 20, 300));
+		playerTwoBricks.add(new Block(width - 200, 350, 20, 300));
 	}
 
 	public void actionPerformed(ActionEvent arg) {
@@ -90,8 +88,7 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 	// checks if a certain block has been hit
 	public boolean hitBlock(Block b) {
 		return x >= getBlockX(b.width, b.centerX, "left") && x <= getBlockX(b.width, b.centerX, "right") && 
-		y >= getBlockY(b.height, b.centerY, "top") && y <= getBlockY(b.height, b.centerY, "bottom") &&
-		!b.isHit;
+		y >= getBlockY(b.height, b.centerY, "top") && y <= getBlockY(b.height, b.centerY, "bottom"); 
 	}
 
 	// changes the motion of the ball (due to a collision)
@@ -114,9 +111,10 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 		// drawing all bricks out onto the screen
 		g.setColor(Color.BLACK);
 		for (int i = 0; i < playerOneBricks.size(); i++) {
-			if (!(playerOneBricks.get(i).isHit)) {
-				g.fillRect(playerOneBricks.get(i).topLeftX, playerOneBricks.get(i).topLeftY, playerOneBricks.get(i).width, playerOneBricks.get(i).height);
-			}
+			g.fillRect(playerOneBricks.get(i).topLeftX, playerOneBricks.get(i).topLeftY, playerOneBricks.get(i).width, playerOneBricks.get(i).height);
+		}
+		for (int i = 0; i < playerTwoBricks.size(); i++) {
+			g.fillRect(playerTwoBricks.get(i).topLeftX, playerTwoBricks.get(i).topLeftY, playerTwoBricks.get(i).width, playerTwoBricks.get(i).height);
 		}
 
 		//g.drawRect(paddleSizeX, paddleSizeY, (int) (width*.40), height/2);
@@ -150,9 +148,28 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 		for (int i = 0; i < playerOneBricks.size(); i++) {
 			if (hitBlock(playerOneBricks.get(i))) {
 				g.clearRect(playerOneBricks.get(i).topLeftX, playerOneBricks.get(i).topLeftY, playerOneBricks.get(i).width, playerOneBricks.get(i).height);
-				playerOneBricks.get(i).isHit = true;
+				System.out.println("Player 2 hit a brick!");
+				playerOneBricks.remove(i);
 				ballCollision();
 			}
+		}
+
+		for (int i = 0; i < playerTwoBricks.size(); i++) {
+			if (hitBlock(playerTwoBricks.get(i))) {
+				g.clearRect(playerTwoBricks.get(i).topLeftX, playerTwoBricks.get(i).topLeftY, playerTwoBricks.get(i).width, playerTwoBricks.get(i).height);
+				System.out.println("Player 1 hit a brick!");
+				playerTwoBricks.remove(i);
+				ballCollision();
+			}
+		}
+
+		// check if either player has won
+		if (playerOneBricks.isEmpty()) {
+			System.out.println("Player 2 has won!");
+			System.exit(0);
+		} else if (playerTwoBricks.isEmpty()) {
+			System.out.println("Player 1 has won!");
+			System.exit(0);
 		}
 
 		// adjust ball position
