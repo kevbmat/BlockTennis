@@ -11,21 +11,17 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 	/* PADDLE VARS */
 	private int paddleWidth = 20; // X dimension for paddles
 	private int paddleHeight = 110; // Y dimension for paddles
-	private int paddleSpeed = 4;
+	private int paddleSpeed = 5;
 	private int paddleOnePos = 0; // X dimension for paddles
 	private int paddleTwoPos = 0; // X dimension for paddles
-
-	/* BACKGROUND IMAGE */
-	private ImageIcon courtIcon;
-	private JLabel courtLabel;
 	
 	/* BALL VARS */
 	private int x = width / 2;		// x position
 	private int y = height / 2;		// y position
 	private int radius = 10;	// ball radius
 
-	private int dx = 3;		// increment amount (x coord)
-	private int dy = 3;		// increment amount (y coord)
+	private int dx = 6;		// increment amount (x coord)
+	private int dy = 6;		// increment amount (y coord)
 	
 	/* BRICK VARS */
 	ArrayList<Block> playerOneBricks = new ArrayList<>();
@@ -34,21 +30,38 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 	/* TIMER VARS */
 	private Timer timer;
 	private int delay = 5;
+
+	/* KEY VARS */
 	ArrayList<Integer> activeKeys = new ArrayList<Integer>();
 
 	public TennisPanel() {
+		JOptionPane.showMessageDialog(null, "Welcome to Block Tennis! \nPlayer 1 moves with Q and A\nPlayer 2 moves with P and L\nFirst to break all the other player's blocks wins!");
+		levelSelect();
 		timer = new Timer(delay, this);
 		timer.start();		// start the timer
+	}
 
-		// adding blocks to the each players block arraylist
-		for (int i = 200; i <= 500; i += 150) {
-			playerOneBricks.add(new Block(200, i, 20, 100));
-			playerTwoBricks.add(new Block(width - 200, i, 20, 100));
+	public void levelSelect() {
+		int option = Integer.parseInt(JOptionPane.showInputDialog("Select Level (1) (2) (3)"));
+		if (option < 1) {
+			option = 1;
+		} else if (option > 3) {
+			option = 3;
 		}
-		courtIcon = new ImageIcon("court.jpg");
-		courtLabel = new JLabel(courtIcon);
-		courtLabel.setIcon(courtIcon);
-		this.add(courtLabel);
+		switch (option) {
+			case 1:
+				for (int i = 200; i <= 500; i += 150) {
+					playerOneBricks.add(new Block(200, i, 20, 100));
+					playerTwoBricks.add(new Block(width - 200, i, 20, 100));
+				}
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			default:
+				System.out.println("Dang we should never have executed this");
+		}
 	}
 
 	public void actionPerformed(ActionEvent arg) {
@@ -177,22 +190,33 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 
 		// check if either player has won
 		if (playerOneBricks.isEmpty()) {
-			timer.stop();
-			System.out.println("Player 2 has won!");
-			JOptionPane.showConfirmDialog(null, "Player 2 has won!");
-			System.exit(0);
+			playAgain("2");
 		} else if (playerTwoBricks.isEmpty()) {
-			timer.stop();
-			System.out.println("Player 1 has won!");
-			JOptionPane.showConfirmDialog(null, "Player 1 has won!");
-			System.exit(0);
+			playAgain("1");
 		}
 
 		// adjust ball position
 		x += dx;
 		y += dy;
 		g.fillOval(x - radius, y - radius, radius*2, radius*2);
-    }
+	}
+	
+	public void playAgain(String winner) {
+		timer.stop();
+		JOptionPane.showMessageDialog(null, "Player " + winner + "has won!" );
+		int playAgain = JOptionPane.showConfirmDialog(null, "Would you like to play Again?", "Game Over", JOptionPane.YES_NO_OPTION);
+		switch (playAgain) {
+			case JOptionPane.YES_OPTION:
+				playerOneBricks.clear();
+				playerTwoBricks.clear();
+				levelSelect();
+				timer.start();
+				break;
+			default:
+				JOptionPane.showMessageDialog(null, "Thanks for Playing!");
+				System.exit(0);
+		}
+	}
 
 	public void keyPressed(KeyEvent e) {
 		boolean foundKey = false;
