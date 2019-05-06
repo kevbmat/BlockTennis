@@ -34,14 +34,22 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 	/* KEY VARS */
 	ArrayList<Integer> activeKeys = new ArrayList<Integer>();
 
+	/* BACKGROUND IMAGE */
+	private ImageIcon courtIcon;
+	private JLabel courtLabel;
+	private int level;
+
 	public TennisPanel() {
 		JOptionPane.showMessageDialog(null, "Welcome to Block Tennis! \nPlayer 1 moves with Q and A\nPlayer 2 moves with P and L\nFirst to break all the other player's blocks wins!");
-		levelSelect();
+		courtIcon = new ImageIcon("game.png");
+		courtLabel = new JLabel(courtIcon);
+		add(courtLabel);
+		level = levelSelect();
 		timer = new Timer(delay, this);
 		timer.start();		// start the timer
 	}
 
-	public void levelSelect() {
+	public int levelSelect() {
 		int option = Integer.parseInt(JOptionPane.showInputDialog("Select Level (1) (2) (3)"));
 		if (option < 1) {
 			option = 1;
@@ -62,6 +70,7 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 			default:
 				System.out.println("Dang we should never have executed this");
 		}
+		return option;
 	}
 
 	public void actionPerformed(ActionEvent arg) {
@@ -130,7 +139,16 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 
 	public void paintComponent( Graphics g ) {
 		super.paintComponent(g);
-		g.setColor(new Color(60,179,113));
+		switch (level) {
+			case 1:
+				g.setColor(new Color(60,179,113));
+				break;
+			case 2:
+				g.setColor(new Color(60,179,113));
+				break;
+			default:
+				g.setColor(new Color(60,179,113));
+		}
 		g.fillRect(0, 0, width, height);
 		// drawing all bricks out onto the screen
 		g.setColor(Color.BLACK);
