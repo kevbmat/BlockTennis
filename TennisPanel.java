@@ -166,6 +166,16 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 		}
 		g.fillRect(0, 0, width, height);
 		// drawing all bricks out onto the screen
+		g.setColor(Color.WHITE);
+		// here we draw the lines of the tennis court
+		g.fillRect(width / 2 - 2, 0, 4, height);
+		g.fillRect(width / 2 - 400, 0, 4, height);
+		g.fillRect(width / 2 + 400, 0, 4, height);
+		// horizontal lines
+		g.fillRect(0, 75, width, 4);
+		g.fillRect(0, height - 75, width, 4);
+		g.fillRect(width / 2 - 400, height / 2, 800, 4);
+
 		g.setColor(Color.BLACK);
 		for (int i = 0; i < playerOneBricks.size(); i++) {
 			g.fillRect(playerOneBricks.get(i).topLeftX, playerOneBricks.get(i).topLeftY, playerOneBricks.get(i).width, playerOneBricks.get(i).height);
