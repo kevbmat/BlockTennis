@@ -6,11 +6,8 @@ import java.util.*;
 public class BlockTennis {
 	public static void main(String[] args) {
         JFrame frame = new JFrame( "Block Tennis" );
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   
         TennisPanel tp = new TennisPanel();
-        JLabel backgroundImage = new JLabel(new ImageIcon("cyberpunk.jpg"));
-
         tp.setLayout(new BorderLayout());
         frame.add(tp);
         frame.setSize(1800, 750);

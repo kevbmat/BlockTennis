@@ -14,6 +14,10 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 	private int paddleSpeed = 4;
 	private int paddleOnePos = 0; // X dimension for paddles
 	private int paddleTwoPos = 0; // X dimension for paddles
+
+	/* BACKGROUND IMAGE */
+	private ImageIcon courtIcon;
+	private JLabel courtLabel;
 	
 	/* BALL VARS */
 	private int x = width / 2;		// x position
@@ -41,6 +45,10 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 			playerOneBricks.add(new Block(200, i, 20, 100));
 			playerTwoBricks.add(new Block(width - 200, i, 20, 100));
 		}
+		courtIcon = new ImageIcon("court.jpg");
+		courtLabel = new JLabel(courtIcon);
+		courtLabel.setIcon(courtIcon);
+		this.add(courtLabel);
 	}
 
 	public void actionPerformed(ActionEvent arg) {
@@ -108,8 +116,9 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 	}
 
 	public void paintComponent( Graphics g ) {
-		super.paintComponent( g );
-
+		super.paintComponent(g);
+		g.setColor(new Color(60,179,113));
+		g.fillRect(0, 0, width, height);
 		// drawing all bricks out onto the screen
 		g.setColor(Color.BLACK);
 		for (int i = 0; i < playerOneBricks.size(); i++) {
@@ -120,8 +129,9 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 		}
 
 		//g.drawRect(paddleSizeX, paddleSizeY, (int) (width*.40), height/2);
-		g.drawRect((int) (width*.30), ((int) (height/2))-(paddleHeight/2)+paddleOnePos, paddleWidth, paddleHeight);
-		g.drawRect((int) (width*.70)-paddleWidth, ((int) (height/2))-(paddleHeight/2)+paddleTwoPos, paddleWidth, paddleHeight);
+		g.setColor(new Color(205,133,63));
+		g.fillRect((int) (width*.30), ((int) (height/2))-(paddleHeight/2)+paddleOnePos, paddleWidth, paddleHeight);
+		g.fillRect((int) (width*.70)-paddleWidth, ((int) (height/2))-(paddleHeight/2)+paddleTwoPos, paddleWidth, paddleHeight);
 		g.setColor(Color.GREEN);
 		
 		// checking for if the ball is hitting the game boundaries
@@ -167,12 +177,14 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 
 		// check if either player has won
 		if (playerOneBricks.isEmpty()) {
+			timer.stop();
 			System.out.println("Player 2 has won!");
-			// JOptionPane.showConfirmDialog(null, "Player 2 has won!");
+			JOptionPane.showConfirmDialog(null, "Player 2 has won!");
 			System.exit(0);
 		} else if (playerTwoBricks.isEmpty()) {
+			timer.stop();
 			System.out.println("Player 1 has won!");
-			// JOptionPane.showConfirmDialog(null, "Player 1 has won!");
+			JOptionPane.showConfirmDialog(null, "Player 1 has won!");
 			System.exit(0);
 		}
 
