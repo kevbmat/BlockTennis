@@ -36,14 +36,12 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 
 	/* BACKGROUND IMAGE */
 	private ImageIcon courtIcon;
-	private JLabel courtLabel;
+	// private JLabel courtLabel;
 	private int level;
 
 	public TennisPanel() {
 		JOptionPane.showMessageDialog(null, "Welcome to Block Tennis! \nPlayer 1 moves with Q and A\nPlayer 2 moves with P and L\nFirst to break all the other player's blocks wins!");
 		courtIcon = new ImageIcon("game.png");
-		courtLabel = new JLabel(courtIcon);
-		add(courtLabel);
 		level = levelSelect();
 		timer = new Timer(delay, this);
 		timer.start();		// start the timer
@@ -62,10 +60,27 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 					playerOneBricks.add(new Block(200, i, 20, 100));
 					playerTwoBricks.add(new Block(width - 200, i, 20, 100));
 				}
+				dx = 5;
+				dy = 5;
+				paddleSpeed = 5;
 				break;
 			case 2:
+				for (int i = 150; i <= 550; i += 100) {
+					playerOneBricks.add(new Block(200, i, 50, 50));
+					playerTwoBricks.add(new Block(width - 200, i, 50, 50));
+				}
+				dx = 6;
+				dy = 6;
+				paddleSpeed = 6;
 				break;
 			case 3:
+				for (int i = 200; i <= 400; i += 100) {
+					playerOneBricks.add(new Block(i, 350, 50, 100));
+					playerTwoBricks.add(new Block(width - i, 350, 50, 100));
+				}
+				dx = 7;
+				dy = 7;
+				paddleSpeed = 7;
 				break;
 			default:
 				System.out.println("Dang we should never have executed this");
@@ -141,13 +156,13 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 		super.paintComponent(g);
 		switch (level) {
 			case 1:
-				g.setColor(new Color(60,179,113));
+				g.setColor(new Color(60, 179, 113));
 				break;
 			case 2:
-				g.setColor(new Color(60,179,113));
+				g.setColor(new Color(109, 97, 147));
 				break;
 			default:
-				g.setColor(new Color(60,179,113));
+				g.setColor(new Color(214, 100, 102));
 		}
 		g.fillRect(0, 0, width, height);
 		// drawing all bricks out onto the screen
@@ -160,7 +175,7 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 		}
 
 		//g.drawRect(paddleSizeX, paddleSizeY, (int) (width*.40), height/2);
-		g.setColor(new Color(205,133,63));
+		g.setColor(new Color(140, 69, 2));
 		g.fillRect((int) (width*.30), ((int) (height/2))-(paddleHeight/2)+paddleOnePos, paddleWidth, paddleHeight);
 		g.fillRect((int) (width*.70)-paddleWidth, ((int) (height/2))-(paddleHeight/2)+paddleTwoPos, paddleWidth, paddleHeight);
 		g.setColor(Color.GREEN);
@@ -221,13 +236,15 @@ public class TennisPanel extends JPanel implements KeyListener, ActionListener {
 	
 	public void playAgain(String winner) {
 		timer.stop();
-		JOptionPane.showMessageDialog(null, "Player " + winner + "has won!" );
+		JOptionPane.showMessageDialog(null, "Player " + winner + " has won!" );
 		int playAgain = JOptionPane.showConfirmDialog(null, "Would you like to play Again?", "Game Over", JOptionPane.YES_NO_OPTION);
 		switch (playAgain) {
 			case JOptionPane.YES_OPTION:
 				playerOneBricks.clear();
 				playerTwoBricks.clear();
-				levelSelect();
+				level = levelSelect();
+				x = width / 2;
+				y = height / 2;
 				timer.start();
 				break;
 			default:
