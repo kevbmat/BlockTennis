@@ -1,3 +1,9 @@
+// Kevin Mattappally
+// Max Distinit
+// Game of tennis where each player tries to
+// destroy all of the enemy player's blocks.
+// First to destroy all of the enemy blocks wins!
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
